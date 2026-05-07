@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+groq
+wikipedia
+duckduckgo-search
+python-dotenv

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentCurious</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080b14;
+      --surface:      #0f1624;
+      --surface2:     #151e30;
+      --border:       #1e2d47;
+      --border-bright:#2a3f60;
+      --violet:       #7c3aed;
+      --violet-bright:#9d5cff;
+      --violet-dim:   #1e1040;
+      --cyan:         #06b6d4;
+      --cyan-dim:     #082830;
+      --orange:       #f97316;
+      --orange-dim:   #2a1200;
+      --text:         #e8edf5;
+      --text-muted:   #7a8ba3;
+      --red:          #f43f5e;
+      --red-dim:      #2a0a12;
+      --mono:         'Courier New', Courier, monospace;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 52px 16px 80px;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, #1a0f3a55, transparent),
+        radial-gradient(ellipse 60% 40% at 80% 80%, #061a2a44, transparent);
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--violet-dim);
+      border: 1px solid #4c1d9555;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--violet-bright);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #e8edf5 0%, #9d5cff 55%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .header-sub {
+      margin-top: 10px;
+      margin-bottom: 16px;
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.55;
+    }
+
+    .brand-mark {
+      background: linear-gradient(135deg, #9d5cff 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .wave {
+      display: inline-block;
+      transform-origin: 70% 70%;
+      animation: wave 2.4s ease-in-out 0.6s infinite;
+      -webkit-text-fill-color: initial;
+    }
+
+    @keyframes wave {
+      0%, 60%, 100% { transform: rotate(0deg); }
+      10% { transform: rotate(14deg); }
+      20% { transform: rotate(-8deg); }
+      30% { transform: rotate(14deg); }
+      40% { transform: rotate(-4deg); }
+      50% { transform: rotate(10deg); }
+    }
+
+    header .subtitle {
+      margin-top: 10px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    header .subtitle .dot { color: var(--border-bright); }
+
+    .pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      border-radius: 999px;
+      padding: 2px 9px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* ── Input card ── */
+    .input-card {
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 0 0 1px #7c3aed18, 0 8px 32px #00000066;
+    }
+
+    textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      padding: 14px 16px;
+      resize: vertical;
+      min-height: 90px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    textarea::placeholder { color: var(--text-muted); }
+    textarea:focus {
+      border-color: var(--violet);
+      box-shadow: 0 0 0 3px #7c3aed22;
+    }
+
+    /* ── Mode selector ── */
+    .mode-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mode-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-right: 4px;
+    }
+
+    .mode-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .mode-btn:hover {
+      border-color: var(--border-bright);
+      color: var(--text);
+    }
+
+    .mode-btn.active[data-mode="auto"] {
+      background: var(--violet-dim);
+      border-color: var(--violet);
+      color: var(--violet-bright);
+    }
+
+    .mode-btn.active[data-mode="wiki"] {
+      background: var(--cyan-dim);
+      border-color: var(--cyan);
+      color: #67e8f9;
+    }
+
+    .mode-btn.active[data-mode="web"] {
+      background: var(--orange-dim);
+      border-color: var(--orange);
+      color: #fdba74;
+    }
+
+    .input-row {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    button#researchBtn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--violet) 0%, #5b21b6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 10px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 2px 12px #7c3aed55;
+    }
+
+    button#researchBtn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    button#researchBtn:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px #7c3aed77;
+    }
+
+    button#researchBtn:not(:disabled):active { transform: translateY(0); }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Results ── */
+    #results {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in { animation: fadeIn 0.3s ease forwards; }
+
+    /* ── Reasoning accordion ── */
+    .accordion {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 16px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: background 0.15s;
+    }
+
+    .accordion-header:hover { background: var(--surface2); }
+
+    .accordion-header .left { display: flex; align-items: center; gap: 7px; }
+
+    .accordion-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--violet-bright);
+      box-shadow: 0 0 6px var(--violet-bright);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .accordion.done .accordion-dot { animation: none; background: #3a4a60; box-shadow: none; }
+
+    .accordion-header .chevron {
+      transition: transform 0.25s;
+      font-size: 0.7rem;
+      color: var(--border-bright);
+    }
+
+    .accordion.open .chevron { transform: rotate(180deg); }
+
+    .accordion-body {
+      display: none;
+      padding: 4px 16px 14px;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      line-height: 1.75;
+      color: #5a7a9a;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 300px;
+      overflow-y: auto;
+      border-top: 1px solid var(--border);
+    }
+
+    .accordion.open .accordion-body { display: block; }
+
+    /* ── Search pill ── */
+    .search-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 14px 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+
+    .search-pill.wiki {
+      background: var(--cyan-dim);
+      border: 1px solid #06b6d430;
+      color: #67e8f9;
+    }
+
+    .search-pill.web {
+      background: var(--orange-dim);
+      border: 1px solid #f9731640;
+      color: #fdba74;
+    }
+
+    .search-icon {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+
+    .search-pill.wiki .search-icon { background: #06b6d422; }
+    .search-pill.web  .search-icon { background: #f9731622; }
+
+    /* ── Search result card ── */
+    .snippet-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      color: #6a8098;
+      line-height: 1.65;
+      font-style: italic;
+    }
+
+    .snippet-card.wiki { border-left: 2px solid var(--cyan); }
+    .snippet-card.web  { border-left: 2px solid var(--orange); }
+
+    .snippet-card .snippet-label {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 0.68rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .snippet-card.wiki .snippet-label { color: var(--cyan); }
+    .snippet-card.web  .snippet-label { color: var(--orange); }
+
+    /* ── Answer card ── */
+    .answer-card {
+      background: linear-gradient(135deg, #0f1624 0%, #12162a 100%);
+      border: 1px solid #7c3aed35;
+      border-radius: 14px;
+      padding: 22px 24px;
+      box-shadow: 0 0 40px #7c3aed18, inset 0 1px 0 #ffffff08;
+    }
+
+    .answer-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--violet-bright);
+      margin-bottom: 14px;
+    }
+
+    .answer-label-bar {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, #7c3aed44, transparent);
+    }
+
+    .answer-body {
+      font-size: 0.975rem;
+      line-height: 1.8;
+      color: #cdd8e8;
+    }
+
+    .answer-body strong { color: #fff; font-weight: 600; }
+
+    /* ── Error box ── */
+    .error-box {
+      background: var(--red-dim);
+      border: 1px solid #f43f5e30;
+      border-radius: 10px;
+      padding: 14px 18px;
+      color: #fda4af;
+      font-size: 0.875rem;
+    }
+
+    .error-box .error-label {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--red);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      header h1 { font-size: 1.5rem; }
+      body { padding-top: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-badge">✦ Curiosity Engine</div>
+      <h1>Hi, I'm <span class="brand-mark">AgentCurious</span> <span class="wave">👋</span></h1>
+      <p class="header-sub">What are you curious about today? Ask me anything — I'll search, think, and bring back answers.</p>
+      <div class="subtitle">
+        <span class="pill-tag">⚡ Groq</span>
+        <span class="dot">·</span>
+        <span class="pill-tag">📖 Wikipedia</span>
+        <span class="dot">·</span>
+        <span class="pill-tag">🦙 Llama 3.3 70B</span>
+      </div>
+    </header>
+
+    <div class="input-card">
+      <textarea id="queryInput" placeholder="Ask a research question…" rows="3"></textarea>
+      <div class="mode-row">
+        <span class="mode-label">Source</span>
+        <button class="mode-btn active" data-mode="auto" onclick="setMode('auto')">✦ Auto</button>
+        <button class="mode-btn" data-mode="wiki" onclick="setMode('wiki')">📖 Wikipedia</button>
+        <button class="mode-btn" data-mode="web" onclick="setMode('web')">🌐 Web</button>
+      </div>
+      <div class="input-row">
+        <button id="researchBtn" onclick="startResearch()">
+          <div class="spinner" id="spinner"></div>
+          <span id="btnLabel">Research</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <script>
+    let reasoningEl = null;   // current accordion body element
+    let answerEl    = null;   // current answer body element
+    let currentMode = 'auto';
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+    }
+
+    function setLoading(on) {
+      const btn     = document.getElementById('researchBtn');
+      const spinner = document.getElementById('spinner');
+      const label   = document.getElementById('btnLabel');
+      btn.disabled        = on;
+      spinner.style.display = on ? 'block' : 'none';
+      label.textContent   = on ? 'Researching…' : 'Research';
+    }
+
+    function addEl(el) {
+      el.classList.add('fade-in');
+      document.getElementById('results').appendChild(el);
+    }
+
+    function ensureAccordion() {
+      if (reasoningEl) return;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'accordion';
+
+      const header = document.createElement('div');
+      header.className = 'accordion-header';
+      header.innerHTML = '<span class="left"><span class="accordion-dot"></span>Reasoning</span><span class="chevron">▼</span>';
+      header.onclick = () => { wrap.classList.toggle('open'); };
+
+      const body = document.createElement('div');
+      body.className = 'accordion-body';
+
+      wrap.appendChild(header);
+      wrap.appendChild(body);
+      addEl(wrap);
+
+      reasoningEl = body;
+    }
+
+    function ensureAnswerCard() {
+      if (answerEl) return;
+
+      const card = document.createElement('div');
+      card.className = 'answer-card';
+
+      const label = document.createElement('div');
+      label.className = 'answer-label';
+      label.innerHTML = '✦ Answer <span class="answer-label-bar"></span>';
+
+      const body = document.createElement('div');
+      body.className = 'answer-body';
+
+      card.appendChild(label);
+      card.appendChild(body);
+      addEl(card);
+
+      answerEl = body;
+    }
+
+    function renderMarkdown(text) {
+      // bold **text**
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    }
+
+    function handleEvent(event) {
+      const { type, content } = event;
+
+      if (type === 'thinking') {
+        ensureAccordion();
+        reasoningEl.textContent += content;
+        // auto-scroll reasoning body
+        reasoningEl.scrollTop = reasoningEl.scrollHeight;
+        return;
+      }
+
+      if (type === 'search') {
+        const source = event.source || 'wiki';
+        const sourceLabel = source === 'web' ? 'the Web' : 'Wikipedia';
+        const icon = source === 'web' ? '🌐' : '🔍';
+        const pill = document.createElement('div');
+        pill.className = `search-pill ${source}`;
+        pill.innerHTML = `<span class="search-icon">${icon}</span><span>Searching ${sourceLabel} for: <strong>${escapeHtml(content)}</strong></span>`;
+        addEl(pill);
+        return;
+      }
+
+      if (type === 'search_result') {
+        const source = event.source || 'wiki';
+        const label = source === 'web' ? 'Web snippet' : 'Wikipedia snippet';
+        const card = document.createElement('div');
+        card.className = `snippet-card ${source}`;
+        card.innerHTML = `<div class="snippet-label">${label}</div>${escapeHtml(content)}`;
+        addEl(card);
+        return;
+      }
+
+      if (type === 'answer') {
+        ensureAnswerCard();
+        answerEl.innerHTML += renderMarkdown(content);
+        return;
+      }
+
+      if (type === 'error') {
+        const box = document.createElement('div');
+        box.className = 'error-box';
+        box.innerHTML = `<div class="error-label">Error</div>${escapeHtml(content)}`;
+        addEl(box);
+        return;
+      }
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function startResearch() {
+      const query = document.getElementById('queryInput').value.trim();
+      if (!query) return;
+
+      // reset state
+      document.getElementById('results').innerHTML = '';
+      reasoningEl = null;
+      answerEl    = null;
+      setLoading(true);
+
+      let buffer = '';
+
+      try {
+        const response = await fetch('http://localhost:8000/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, mode: currentMode }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server returned ${response.status}`);
+        }
+
+        const reader  = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+
+          const lines = buffer.split('\n');
+          // keep the last (potentially incomplete) line in the buffer
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed.startsWith('data: ')) continue;
+            const jsonStr = trimmed.slice('data: '.length);
+            try {
+              const event = JSON.parse(jsonStr);
+              handleEvent(event);
+            } catch {
+              // malformed JSON — skip
+            }
+          }
+        }
+
+        // flush remaining buffer
+        if (buffer.trim().startsWith('data: ')) {
+          try {
+            const event = JSON.parse(buffer.trim().slice('data: '.length));
+            handleEvent(event);
+          } catch { /* ignore */ }
+        }
+
+      } catch (err) {
+        const box = document.createElement('div');
+        box.className = 'error-box';
+        box.innerHTML = `<div class="error-label">Connection Error</div>${escapeHtml(err.message)}`;
+        addEl(box);
+      } finally {
+        setLoading(false);
+        // stop the pulsing dot when reasoning is complete
+        const accordion = document.querySelector('.accordion');
+        if (accordion) accordion.classList.add('done');
+      }
+    }
+
+    // allow Cmd/Ctrl+Enter to submit
+    document.getElementById('queryInput').addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') startResearch();
+    });
+  </script>
+</body>
+</html>
