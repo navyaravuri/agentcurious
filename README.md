@@ -1,8 +1,12 @@
 # AgentCurious
 
+**Live demo:** [agentcurious-frontend.onrender.com](https://agentcurious-frontend.onrender.com/)
+
 A research agent that uses an LLM to actually do research — searching Wikipedia and the web, reasoning over the results, and streaming its thinking live to the user.
 
 You ask a question. The agent plans, searches, reflects, and answers — and you watch every step happen in real time.
+
+> Note: the backend is hosted on Render's free tier and spins down after ~15 min of inactivity. The first request after that may take 30–60 seconds to wake up.
 
 ---
 
